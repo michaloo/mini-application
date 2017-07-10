@@ -1,0 +1,22 @@
+#!/usr/bin/env node
+
+const MiniApplication = require("../src/mini-application");
+const {
+  startReplServer,
+  mixinReplContext
+} = require("../src/repl");
+
+const miniApp = new MiniApplication();
+const port = process.env.PORT || 3000;
+
+miniApp.listen(port)
+  .then(() => {
+    console.log(`miniApp - listening on ${port}`);
+    const replServer = startReplServer("miniApp > ");
+    mixinReplContext(replServer, miniApp);
+    replServer.displayPrompt();
+    replServer.on('reset', mixinReplContext.bind(null, replServer, miniApp));
+    replServer.on('exit', () => {
+      miniApp.close();
+    });
+  });
