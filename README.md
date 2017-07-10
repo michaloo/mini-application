@@ -53,13 +53,14 @@ miniApp.stubApp("/test")
 miniApp.stubApp("post", "/test").respond((req, res) => res.end("on post call only"));
 ```
 
-### Use sinon helpers
+### Use sinon helper
 
 ```js
+// respond with json
 miniApp.stubApp("/test").respond({ text: "json response" });
-// or
+// or set the status code
 miniApp.stubApp("/test").respond(503);
-// or
+// or just send a text
 miniApp.stubApp("/test").respond("ok");
 ```
 
@@ -89,4 +90,26 @@ miniApp > stubApp("/").respond("ok")
 # now open http://localhost:3000/ in the browser to see the response
 # then you can inspect all requests which were made to the miniApp instance:
 miniApp > requests.get("incoming").value()
+```
+
+## Extendable
+
+For easier testing custom logic can be wrapped as a class extending the MiniApplication base:
+
+```js
+class TestApplication extends MiniApplication {
+  constructor(options) {
+    super(options);
+    this.stubApp("get", "test");
+  }
+}
+
+miniApp = new TestApplication();
+miniApp.listen(3000)
+  .then(() => {
+    request.get("http://localhost:3000/test").end();
+    miniApp.on("incoming.request@GET/test", (req) => {
+      expect(req.url).to.be.equal("/test");
+    });
+  });
 ```
