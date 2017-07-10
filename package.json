@@ -1,11 +1,12 @@
 {
   "name": "mini-application",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "src/mini-application.js",
   "scripts": {
     "test": "mocha"
   },
+  "bin": "./bin/mini-application",
   "license": "MIT",
   "author": "Michał Rączka",
   "dependencies": {

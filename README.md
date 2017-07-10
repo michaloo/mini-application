@@ -77,3 +77,16 @@ miniApp.on("incoming.request@/test", (req) => {
   done();
 });
 ```
+
+## Interactive
+
+Sometimes it's hard to write a good test without manual verification first. Miniapp should help here too:
+
+```sh
+bin/mini-application
+miniApp - listening on 3000
+miniApp > stubApp("/").respond("ok")
+# now open http://localhost:3000/ in the browser to see the response
+# then you can inspect all requests which were made to the miniApp instance:
+miniApp > requests.get("incoming").value()
+```
