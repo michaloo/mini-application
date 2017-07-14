@@ -44,7 +44,7 @@ miniApp.stubApp("/test")
   .onFirstCall()
   .respond((req, res) => res.end("first response"))
   .onSecondCall()
-  .respond((req, res) => res.end("first response"));
+  .respond((req, res) => res.end("second response"));
 ```
 
 ### Stub specific method only
