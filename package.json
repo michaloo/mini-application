@@ -5,7 +5,7 @@
   "main": "src/mini-application.js",
   "scripts": {
     "test:lint": "eslint src",
-    "test:unit": "nyc mocha --reporter mocha-junit-reporter --reporter spec",
+    "test:unit": "nyc mocha --reporter mocha-junit-reporter",
     "test": "npm run test:lint && npm run test:unit"
   },
   "bin": "./bin/mini-application",
