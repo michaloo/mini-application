@@ -5,8 +5,8 @@
   "main": "src/mini-application.js",
   "scripts": {
     "test:lint": "eslint src",
-    "test:unit": "nyc mocha --reporter mocha-junit-reporter",
-    "test": "npm run test:lint && npm run test:unit"
+    "test:ci": "npm run test:lint && nyc --reporter=lcov mocha --reporter mocha-junit-reporter",
+    "test": "npm run test:lint && nyc mocha"
   },
   "bin": "./bin/mini-application",
   "license": "MIT",
@@ -35,10 +35,6 @@
   "nyc": {
     "include": [
       "src"
-    ],
-    "reporter": [
-      "lcov",
-      "text"
     ]
   }
 }

@@ -22,7 +22,7 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
       - run:
-          command: npm test
+          command: npm run test:ci
           environment:
             MOCHA_FILE: junit/test-results.xml
       - store_artifacts:
