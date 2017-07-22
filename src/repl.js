@@ -1,6 +1,11 @@
 const repl = require("repl");
 const vm = require("vm");
 
+const _ = require("lodash");
+const faker = require("faker");
+const shell = require("shelljs");
+const moment = require("moment");
+
 function startReplServer(prompt) {
   const replServer = repl.start({
     prompt: prompt,
@@ -23,22 +28,34 @@ function startReplServer(prompt) {
     }
   });
   return replServer;
-};
+}
 
 function mixinReplContext(replServer, miniApplication) {
   Object.assign(replServer.context, miniApplication);
   const functions = Object.getOwnPropertyNames(Object.getPrototypeOf(miniApplication))
     .concat(Object.getOwnPropertyNames(miniApplication).filter(f => typeof miniApplication[f] === "function"))
-    .concat(["listen", "close", "list"]); // TODO: find more flexible way of mixin' the base class methods
+    .concat(["on", "once", "save", "load", "stubApp", "listen", "close", "list", "request", "get", "put", "post", "delete"]);
   functions.map(funcName => {
-    if (funcName === "_") {
-      return replServer.context[funcName] = miniApplication[funcName];
-    }
     replServer.context[funcName] = miniApplication[funcName].bind(miniApplication);
   });
+  replServer.context._ = _;
+  replServer.context.faker = faker;
+  replServer.context.shell = shell;
+  replServer.context.moment = moment;
+}
+
+function setupReplServer(replServer, miniApp) {
+  mixinReplContext(replServer, miniApp);
+  replServer.displayPrompt();
+  replServer.on("reset", mixinReplContext.bind(null, replServer, miniApp));
+  replServer.on("exit", () => {
+    miniApp.close();
+  });
+  return replServer;
 }
 
 module.exports =  {
   mixinReplContext,
-  startReplServer
+  startReplServer,
+  setupReplServer
 };

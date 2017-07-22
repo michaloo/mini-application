@@ -3,7 +3,7 @@
 const MiniApplication = require("../src/mini-application");
 const {
   startReplServer,
-  mixinReplContext
+  setupReplServer
 } = require("../src/repl");
 
 const miniApp = new MiniApplication();
@@ -13,10 +13,5 @@ miniApp.listen(port)
   .then(() => {
     console.log(`miniApp - listening on ${port}`);
     const replServer = startReplServer("miniApp > ");
-    mixinReplContext(replServer, miniApp);
-    replServer.displayPrompt();
-    replServer.on('reset', mixinReplContext.bind(null, replServer, miniApp));
-    replServer.on('exit', () => {
-      miniApp.close();
-    });
+    setupReplServer(replServer, miniApp);
   });

@@ -1,10 +1,12 @@
 {
   "name": "mini-application",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "",
   "main": "src/mini-application.js",
   "scripts": {
-    "test": "mocha"
+    "test:lint": "eslint src",
+    "test:unit": "nyc mocha",
+    "test": "npm run test:lint && npm run test:unit"
   },
   "bin": "./bin/mini-application",
   "license": "MIT",
@@ -25,6 +27,8 @@
   "devDependencies": {
     "chai": "^4.0.2",
     "documentation": "^4.0.0-rc.1",
-    "mocha": "^3.4.2"
+    "eslint": "^4.3.0",
+    "mocha": "^3.4.2",
+    "nyc": "^11.0.3"
   }
 }
