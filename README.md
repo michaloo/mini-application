@@ -2,6 +2,9 @@
 
 Express app and sinon mocks to the rescue!
 
+![CircleCI Status](https://circleci.com/gh/michaloo/mini-application.png)
+![CodeCov](https://codecov.io/gh/michaloo/mini-application/branch/master/graph/badge.svg)
+
 ## Installation
 
 `npm i mini-application --save`

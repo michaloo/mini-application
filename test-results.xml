@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="0.14900000000000002" tests="9" failures="0">
+  <testsuite name="Root Suite" timestamp="2017-07-22T11:53:35" tests="0" failures="0" time="0">
+  </testsuite>
+  <testsuite name="Mini Application Events Emmiter" timestamp="2017-07-22T11:53:35" tests="1" file="/Users/michaloo/Projects/mini-application/test/events-test.js" failures="0" time="0.043">
+    <testcase name="Mini Application Events Emmiter should emit events for method and path" time="0.043" classname="should emit events for method and path">
+    </testcase>
+  </testsuite>
+  <testsuite name="Mini Application Base Class" timestamp="2017-07-22T11:53:35" tests="1" file="/Users/michaloo/Projects/mini-application/test/extend-test.js" failures="0" time="0.035">
+    <testcase name="Mini Application Base Class should allow to be extended to include custom logic" time="0.035" classname="should allow to be extended to include custom logic">
+    </testcase>
+  </testsuite>
+  <testsuite name="Mini Application Incoming Requests" timestamp="2017-07-22T11:53:35" tests="1" file="/Users/michaloo/Projects/mini-application/test/incoming-request-test.js" failures="0" time="0.006">
+    <testcase name="Mini Application Incoming Requests should track all incoming requests, even resulting in 404" time="0.006" classname="should track all incoming requests, even resulting in 404">
+    </testcase>
+  </testsuite>
+  <testsuite name="Mini Application Public Api" timestamp="2017-07-22T11:53:35" tests="1" file="/Users/michaloo/Projects/mini-application/test/public-api-test.js" failures="0" time="0.02">
+    <testcase name="Mini Application Public Api should expose a basic set of functions" time="0.02" classname="should expose a basic set of functions">
+    </testcase>
+  </testsuite>
+  <testsuite name="Mini Application Stub" timestamp="2017-07-22T11:53:35" tests="5" file="/Users/michaloo/Projects/mini-application/test/stub-response-test.js" failures="0" time="0.045">
+    <testcase name="Mini Application Stub should allow to stub all metods for given url" time="0.009" classname="should allow to stub all metods for given url">
+    </testcase>
+    <testcase name="Mini Application Stub should allow to stub different responses on different calls" time="0.009" classname="should allow to stub different responses on different calls">
+    </testcase>
+    <testcase name="Mini Application Stub should allow to stub only selected method" time="0.007" classname="should allow to stub only selected method">
+    </testcase>
+    <testcase name="Mini Application Stub should respond with json via helper" time="0.012" classname="should respond with json via helper">
+    </testcase>
+    <testcase name="Mini Application Stub should expose status response helper" time="0.008" classname="should expose status response helper">
+    </testcase>
+  </testsuite>
+</testsuites>
