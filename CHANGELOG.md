@@ -1,3 +1,7 @@
+## v1.0.4
+- make `faker`, `moment` and `shelljs` dependencies optional
+- more test
+
 ## v1.0.3
 - move console utilities to repl
 - add `request` method

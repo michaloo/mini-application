@@ -2,9 +2,26 @@ const repl = require("repl");
 const vm = require("vm");
 
 const _ = require("lodash");
-const faker = require("faker");
-const shell = require("shelljs");
-const moment = require("moment");
+
+/**
+ * Optional dependencies
+ */
+/* eslint-disable */
+let faker;
+let moment;
+let shell;
+try {
+  faker = require("faker");
+} catch (e) {}
+
+try {
+  shell = require("shelljs");
+} catch (e) {}
+
+try {
+  moment = require("moment");
+} catch (e) {}
+/* eslint-enable */
 
 function startReplServer(prompt) {
   const replServer = repl.start({
