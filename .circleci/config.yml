@@ -16,14 +16,20 @@ jobs:
           - v1-dependencies-{{ checksum "package.json" }}
           - v1-dependencies-
       - run: npm install
+      - run: mkdir junit
       - save_cache:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-      - run: npm test
+      - run:
+          command: npm test
+          environment:
+            MOCHA_FILE: junit/test-results.xml
       - store_artifacts:
           path: coverage
           prefix: coverage
       - store_test_results:
-          path: test-results.xml
+          path: /junit
+      - store_artifacts:
+          path: /junit
       - run: bash <(curl -s https://codecov.io/bash)
