@@ -2,6 +2,7 @@ const repl = require("repl");
 const vm = require("vm");
 
 const _ = require("lodash");
+const shell = require("shelljs");
 
 /**
  * Optional dependencies
@@ -9,13 +10,9 @@ const _ = require("lodash");
 /* eslint-disable */
 let faker;
 let moment;
-let shell;
-try {
-  faker = require("faker");
-} catch (e) {}
 
 try {
-  shell = require("shelljs");
+  faker = require("faker");
 } catch (e) {}
 
 try {

@@ -65,7 +65,7 @@ describe("Mini Application Stub", () => {
       });
   });
 
-  it("should expose status response helper", (done) => {
+  it("should respond with status code", (done) => {
     miniApp.stubApp("/test").respond(503);
     request.get("http://localhost:3000/test")
       .end((err, res) => {
@@ -74,6 +74,14 @@ describe("Mini Application Stub", () => {
       });
   });
 
+  it("should respond with text", (done) => {
+    miniApp.stubApp("/test").respond("foo");
+    request.get("http://localhost:3000/test")
+      .end((err, res) => {
+        expect(res.text).to.be.equal("foo");
+        done();
+      });
+  });
 
   afterEach(() => miniApp.close());
 });

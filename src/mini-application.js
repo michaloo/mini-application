@@ -10,6 +10,7 @@ const _ = require("lodash");
 const Promise = require("bluebird");
 const util = require("util");
 const sinon = require("sinon");
+const shell = require("shelljs");
 
 /**
  * Base class allowing to run simple mocking server with express and lowdb.
@@ -98,8 +99,8 @@ class MiniApplication {
         const count = this.requests.get("outgoing").value().length;
         this.emit("outgoing.request", reqData);
         this.emit(`outgoing.request#${count}`, reqData);
-        this.emit(`outgoing.request#${reqData.url}`, reqData);
-        this.emit(`outgoing.request#${reqData.method}${reqData.url}`, reqData);
+        this.emit(`outgoing.request@${reqData.url}`, reqData);
+        this.emit(`outgoing.request@${reqData.method}${reqData.url}`, reqData);
       });
   }
 
@@ -168,8 +169,8 @@ class MiniApplication {
    * For interactive usage - lists all json files in current directory
    * @return {Array}
    */
-  list() {
-    return this.shell.ls('*.mini-app.json')
+  list() { // eslint-disable-line class-methods-use-this
+    return shell.ls('*.mini-app.json')
       .map(f => f.replace(".mini-app.json", ""));
   }
 }

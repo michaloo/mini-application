@@ -1,3 +1,6 @@
+## v1.0.5
+- bugfixes and full test coverage
+
 ## v1.0.4
 - make `faker`, `moment` and `shelljs` dependencies optional
 - more test
