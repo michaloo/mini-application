@@ -5,7 +5,7 @@
   "main": "src/mini-application.js",
   "scripts": {
     "test:lint": "eslint src",
-    "test:unit": "nyc report --reporter=lcov --report-dir ${CIRCLE_ARTIFACTS:=coverage} mocha",
+    "test:unit": "nyc report --reporter=lcov mocha",
     "test": "npm run test:lint && npm run test:unit"
   },
   "bin": "./bin/mini-application",
