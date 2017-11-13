@@ -1,12 +1,14 @@
 {
   "name": "mini-application",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Microservice stubs using Express, Sinon and Event Emitter",
   "main": "src/mini-application.js",
   "scripts": {
     "test:lint": "eslint src",
-    "test:ci": "npm run test:lint && nyc --reporter=lcov mocha --reporter mocha-junit-reporter",
-    "test": "npm run test:lint && nyc mocha"
+    "test:flow": "flow check",
+    "test:ci": "npm run test:lint && npm run test:flow && nyc --reporter=lcov mocha --reporter mocha-junit-reporter",
+    "test": "npm run test:lint && nyc mocha",
+    "documentation": "documentation build -f html -o documentation/"
   },
   "bin": "./bin/mini-application",
   "license": "MIT",
@@ -16,7 +18,6 @@
     "body-parser": "^1.17.2",
     "express": "^4.15.3",
     "lodash": "^4.17.4",
-    "lodash-id": "^0.14.0",
     "lowdb": "^0.16.2",
     "sinon": "^2.3.2",
     "superagent": "^3.5.2",
@@ -31,6 +32,7 @@
     "chai": "^4.0.2",
     "documentation": "^4.0.0-rc.1",
     "eslint": "^4.3.0",
+    "flow-bin": "^0.59.0",
     "mocha": "^3.4.2",
     "mocha-junit-reporter": "^1.13.0",
     "nyc": "^11.0.3"

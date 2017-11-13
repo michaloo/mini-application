@@ -1,23 +1,43 @@
+/* @flow */
 const express = require("express");
 const low = require("lowdb");
 const EventEmitter = require("events");
 const bodyParser = require("body-parser");
 const http = require("http");
 const fs = require("fs");
-const request = require("superagent");
+const superagent = require("superagent");
 const superagentPromisePlugin = require("superagent-promise-plugin");
 const _ = require("lodash");
 const Promise = require("bluebird");
-const util = require("util");
 const sinon = require("sinon");
 const shell = require("shelljs");
+
+/*::
+export interface MiniApplicationInterface {
+  app: express;
+  db: low;
+  requests: Object;
+  server: Object;
+  port: Number;
+
+  close(): Promise;
+}
+*/
 
 /**
  * Base class allowing to run simple mocking server with express and lowdb.
  * Can be extended to provide custom functionality.
  */
-class MiniApplication {
+class MiniApplication extends EventEmitter/*:: implements MiniApplicationInterface */ {
+
+  /*:: app: express */
+  /*:: db: low */
+  /*:: requests: Object */
+  /*:: server: Object */
+  /*:: port: Number */
+
   constructor() {
+    super();
     // Basic dependencies
     this.app = express();
     this.db = low();
@@ -36,32 +56,11 @@ class MiniApplication {
       next();
     });
 
-    /*
+    /**
      * Sinon stub setup
+     * @function respond
      */
-    sinon.addBehavior("respond", (fake, arg1, arg2 = "") => {
-      if (_.isFunction(arg1)) {
-        return fake.callsFake(arg1);
-      }
-
-      if (_.isNumber(arg1)) {
-        return fake.callsFake((req, res) => {
-          res.status(arg1).end(arg2);
-        });
-      }
-
-      if (_.isObject(arg1)) {
-        return fake.callsFake((req, res) => {
-          res.json(arg1);
-        });
-      }
-
-      if (_.isString(arg1)) {
-        return fake.callsFake((req, res) => {
-          res.end(arg1);
-        });
-      }
-    });
+    sinon.addBehavior("respond", this._respond);
     sinon.stub(this, "_stubMiddleware");
     this._stubMiddleware.callThrough();
     this.app.use((req, res, next) => {
@@ -70,29 +69,53 @@ class MiniApplication {
     return this;
   }
 
-  get(url) {
+  _respond(fake/*: Object */, arg1/*: any */, arg2/*: any */ = "") { // eslint-disable-line class-methods-use-this
+    if (_.isFunction(arg1)) {
+      return fake.callsFake(arg1);
+    }
+
+    if (_.isNumber(arg1)) {
+      return fake.callsFake((req, res) => {
+        res.status(arg1).end(arg2);
+      });
+    }
+
+    if (_.isObject(arg1)) {
+      return fake.callsFake((req, res) => {
+        res.json(arg1);
+      });
+    }
+
+    if (_.isString(arg1)) {
+      return fake.callsFake((req, res) => {
+        res.end(arg1);
+      });
+    }
+  }
+
+  get(url/*: string */) {
     return this.request("get", url);
   }
 
-  post(url) {
+  post(url/*: string */) {
     return this.request("post", url);
   }
 
-  put(url) {
+  put(url/*: string */) {
     return this.request("put", url);
   }
 
-  delete(url) {
+  delete(url/*: string */) {
     return this.request("delete", url);
   }
 
   /**
-   * @param  {String} verb
+   * @param  {String} verb HTTP verb
    * @param  {String} url
-   * @return {Promise}
+   * @return {superagent}
    */
-  request(verb, url) {
-    return request[verb](url)
+  request(verb/*: string */, url/*: string */) {
+    return superagent[verb](url)
       .use(superagentPromisePlugin)
       .on("request", (reqData) => {
         this.requests.get("outgoing").push(_.pick(reqData, "method", "url", "header", "cookies", "qs", "protocol", "host")).write();
@@ -105,13 +128,16 @@ class MiniApplication {
   }
 
   /**
-   * @param  {String} method
-   * @param  {String} url
-   * @param  {Object} query
-   * @param  {String|Object} body
+   * Stub Express application response for selected requests.
+   * @param  {string|null} method
+   * @param  {string|sinon.match} url
+   * @param  {Object|sinon.match} query
+   * @param  {string|Object|sinon.match} body
    * @return {sinon.stub}
+   * @example
+   * stubApp("/test").respond("test") // responds with "test" for all HTTP verbs on "/test"
    */
-  stubApp(method, url, query, body) {
+  stubApp(method/*: string|null */, url/*: string|null */, query/*: Object|sinon.match */, body/*: string|Object|sinon.match */) {
     if (!url) {
       url = method;
       method = null;
@@ -132,7 +158,7 @@ class MiniApplication {
     return this._stubMiddleware.withArgs(sinon.match.any, sinon.match.any, sinon.match.any, method, url, query, body);
   }
 
-  _stubMiddleware(req, res, next) { // eslint-disable-line class-methods-use-this
+  _stubMiddleware(req/*: Object */, res/*: Object */, next/*: Function*/, method/*: string */, url/*: string */, query/*: Object */, body/*: string|Object */) { // eslint-disable-line class-methods-use-this,no-unused-vars
     next();
   }
 
@@ -141,7 +167,7 @@ class MiniApplication {
    * @param  {Number} port
    * @return {Promise}
    */
-  listen(port) {
+  listen(port/*: Number*/)/*: Promise */ {
     this.port = port;
     return Promise.fromCallback((callback) => {
       this.server.listen(port, callback);
@@ -150,18 +176,27 @@ class MiniApplication {
 
   /**
    * Close the server - important for automatic testing when you start and stop the server multiple times.
+   * @return {Promise}
    */
-  close() {
+  close()/*: Promise */ {
     return Promise.fromCallback((callback) => {
       this.server.close(callback);
     });
   }
 
-  save(name) {
+  /**
+   * @param  {String} name filename
+   * @return {undefined}
+   */
+  save(name/*: string */) {
     return fs.writeFileSync(`${name}.mini-app.json`, JSON.stringify(this.db.getState()), "utf-8");
   }
 
-  load(name) {
+  /**
+   * @param  {String} name filename
+   * @return {Object}
+   */
+  load(name/*: string */) {
     return this.db.setState(JSON.parse(fs.readFileSync(`${name}.mini-app.json`, "utf-8")));
   }
 
@@ -175,5 +210,4 @@ class MiniApplication {
   }
 }
 
-util.inherits(MiniApplication, EventEmitter);
 module.exports = MiniApplication;

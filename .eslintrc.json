@@ -247,7 +247,8 @@
     "space-unary-ops": "error",
     "spaced-comment": [
       "error",
-      "always"
+      "always",
+      { "markers": [":", "::"] }
     ],
     "strict": [
       "error",

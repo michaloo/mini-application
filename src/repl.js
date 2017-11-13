@@ -1,12 +1,12 @@
+/* @flow */
+/*:: import { MiniApplicationInterface } from "./mini-application" */
 const repl = require("repl");
 const vm = require("vm");
 
 const _ = require("lodash");
 const shell = require("shelljs");
 
-/**
- * Optional dependencies
- */
+/* Optional dependencies */
 /* eslint-disable */
 let faker;
 let moment;
@@ -20,7 +20,7 @@ try {
 } catch (e) {}
 /* eslint-enable */
 
-function startReplServer(prompt) {
+function startReplServer(prompt/*: string */) {
   const replServer = repl.start({
     prompt: prompt,
     useColors: true,
@@ -44,12 +44,14 @@ function startReplServer(prompt) {
   return replServer;
 }
 
-function mixinReplContext(replServer, miniApplication) {
+function mixinReplContext(replServer/*: Object */, miniApplication/*: MiniApplicationInterface */) {
   Object.assign(replServer.context, miniApplication);
   const functions = Object.getOwnPropertyNames(Object.getPrototypeOf(miniApplication))
+    // $FlowFixMe
     .concat(Object.getOwnPropertyNames(miniApplication).filter(f => typeof miniApplication[f] === "function"))
     .concat(["on", "once", "save", "load", "stubApp", "listen", "close", "list", "request", "get", "put", "post", "delete"]);
   functions.map(funcName => {
+    // $FlowFixMe
     replServer.context[funcName] = miniApplication[funcName].bind(miniApplication);
   });
   replServer.context._ = _;
@@ -58,7 +60,7 @@ function mixinReplContext(replServer, miniApplication) {
   replServer.context.moment = moment;
 }
 
-function setupReplServer(replServer, miniApp) {
+function setupReplServer(replServer/*: Object */, miniApp/*: MiniApplicationInterface */) {
   mixinReplContext(replServer, miniApp);
   replServer.displayPrompt();
   replServer.on("reset", mixinReplContext.bind(null, replServer, miniApp));
