@@ -10,13 +10,11 @@ const {
 describe("Repl Server Helper", () => {
   it("should create repl server", () => {
     const replServer = startReplServer("foo > ");
-    console.log(replServer._prompt);
   });
 
   it("should create repl server", () => {
     const appSpy = new Proxy({}, {
       get: () => {
-        console.log("GETTER");
         return () => {};
       }
     });
@@ -24,6 +22,5 @@ describe("Repl Server Helper", () => {
       context: {}
     };
     mixinReplContext(replSpy, appSpy);
-    console.log(replSpy.context);
   });
 });

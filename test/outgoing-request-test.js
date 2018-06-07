@@ -18,8 +18,8 @@ describe("Mini Application Outgoing Requests", () => {
     miniApp.request("get", "http://localhost:3000/test")
       .then((res) => {
         const lastReq = miniApp.requests.get("outgoing.0").value();
-        expect(lastReq.url).to.be.equal("http://localhost:3000/test");
-        expect(res.statusCode).to.be.equal(200);
+        expect(lastReq.url).to.equal("http://localhost:3000/test");
+        expect(res.statusCode).to.equal(200);
         done();
       });
   });
@@ -31,9 +31,9 @@ describe("Mini Application Outgoing Requests", () => {
       return miniApp[verb]("http://localhost:3000/test")
         .then((res) => {
           const lastReq = miniApp.requests.get("outgoing").last().value();
-          expect(lastReq.url).to.be.equal("http://localhost:3000/test");
-          expect(lastReq.method).to.be.equal(verb.toUpperCase());
-          expect(res.statusCode).to.be.equal(200);
+          expect(lastReq.url).to.equal("http://localhost:3000/test");
+          expect(lastReq.method).to.equal(verb.toUpperCase());
+          expect(res.statusCode).to.equal(200);
           return true;
         });
     }, { concurrency: 1 }).then(() => done());

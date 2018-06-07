@@ -22,11 +22,11 @@ describe("Mini Application Interactive", () => {
   it("should allow to load state", () => {
     fs.writeFileSync("./test2.mini-app.json", "{\"foo\":\"bar\"}");
     miniApp.load("test2");
-    expect(miniApp.db.getState()).to.be.eql({ foo: "bar" });
+    expect(miniApp.db.getState()).to.eql({ foo: "bar" });
   });
 
   it("should allow to list files", () => {
-    expect(miniApp.list()).to.be.eql(["test", "test2"]);
+    expect(miniApp.list()).to.eql(["test", "test2"]);
   });
 
   afterEach(() => miniApp.close());

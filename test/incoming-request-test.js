@@ -15,8 +15,8 @@ describe("Mini Application Incoming Requests", () => {
     request.get("http://localhost:3000/test")
       .end((err, res) => {
         const lastReq = miniApp.requests.get("incoming.0").value();
-        expect(lastReq.url).to.be.equal("/test");
-        expect(res.statusCode).to.be.equal(404);
+        expect(lastReq.url).to.equal("/test");
+        expect(res.statusCode).to.equal(404);
         done();
       });
   });

@@ -14,7 +14,7 @@ describe("Mini Application Events Emmiter", () => {
   it("should emit events for method and path", (done) => {
     request.get("http://localhost:3000/test").end();
     miniApp.on("incoming.request@GET/test", (req) => {
-      expect(req.url).to.be.equal("/test");
+      expect(req.url).to.equal("/test");
       done();
     });
   });
