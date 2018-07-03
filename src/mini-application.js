@@ -1,12 +1,12 @@
 /* @flow */
 const express = require("express");
 const low = require("lowdb");
+const Memory = require('lowdb/adapters/Memory')
 const EventEmitter = require("events");
 const bodyParser = require("body-parser");
 const http = require("http");
 const fs = require("fs");
 const superagent = require("superagent");
-const superagentPromisePlugin = require("superagent-promise-plugin");
 const _ = require("lodash");
 const Promise = require("bluebird");
 const sinon = require("sinon");
@@ -40,8 +40,8 @@ class MiniApplication extends EventEmitter/*:: implements MiniApplicationInterfa
     super();
     // Basic dependencies
     this.app = express();
-    this.db = low();
-    this.requests = low().defaults({ incoming: [], outgoing: [] });
+    this.db = low(new Memory());
+    this.requests = low(new Memory()).setState({ incoming: [], outgoing: [] });
     this.server = http.createServer(this.app);
 
     // Setup Express application
@@ -56,10 +56,6 @@ class MiniApplication extends EventEmitter/*:: implements MiniApplicationInterfa
       next();
     });
 
-    /**
-     * Sinon stub setup
-     * @function respond
-     */
     sinon.addBehavior("respond", this._respond);
     sinon.stub(this, "_stubMiddleware");
     this._stubMiddleware.callThrough();
@@ -69,6 +65,10 @@ class MiniApplication extends EventEmitter/*:: implements MiniApplicationInterfa
     return this;
   }
 
+  /**
+   * Sinon stub setup
+   * @method respond
+   */
   _respond(fake/*: Object */, arg1/*: any */, arg2/*: any */ = "") { // eslint-disable-line class-methods-use-this
     if (_.isFunction(arg1)) {
       return fake.callsFake(arg1);
@@ -116,7 +116,6 @@ class MiniApplication extends EventEmitter/*:: implements MiniApplicationInterfa
    */
   request(verb/*: string */, url/*: string */) {
     return superagent[verb](url)
-      .use(superagentPromisePlugin)
       .on("request", (reqData) => {
         this.requests.get("outgoing").push(_.pick(reqData, "method", "url", "header", "cookies", "qs", "protocol", "host")).write();
         const count = this.requests.get("outgoing").value().length;
@@ -182,6 +181,20 @@ class MiniApplication extends EventEmitter/*:: implements MiniApplicationInterfa
     return Promise.fromCallback((callback) => {
       this.server.close(callback);
     });
+  }
+
+  /**
+   * Allows to reset current mini-application state.
+   * This reset behavior and history of the internal stub
+   * as well as internal databases/states.
+   *
+   * @return {void}
+   */
+  reset() {
+    this._stubMiddleware.reset();
+    this._stubMiddleware.callThrough();
+    this.db.setState({});
+    this.requests.setState({ incoming: [], outgoing: [] });
   }
 
   /**

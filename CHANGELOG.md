@@ -1,3 +1,8 @@
+## v1.1.0
+- upgraded most of the dependencies
+- added `reset` method to clean the stub and internal db states
+- removed obsolete superagent promise plugin
+
 ## v1.0.6
 - flow type checks
 - initial API documentation

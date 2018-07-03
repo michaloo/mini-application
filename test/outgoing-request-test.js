@@ -7,7 +7,7 @@ const MiniApplication = require("../src/mini-application");
 
 describe("Mini Application Outgoing Requests", () => {
   let miniApp;
-  beforeEach(() => {
+  before(() => {
     miniApp = new MiniApplication();
     return miniApp.listen(3000);
   });
@@ -39,5 +39,6 @@ describe("Mini Application Outgoing Requests", () => {
     }, { concurrency: 1 }).then(() => done());
   });
 
-  afterEach(() => miniApp.close());
+  afterEach(() => miniApp.reset());
+  after(() => miniApp.close());
 });

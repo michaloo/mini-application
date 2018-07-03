@@ -10,6 +10,7 @@ const {
 describe("Repl Server Helper", () => {
   it("should create repl server", () => {
     const replServer = startReplServer("foo > ");
+    replServer.close();
   });
 
   it("should create repl server", () => {
@@ -23,4 +24,5 @@ describe("Repl Server Helper", () => {
     };
     mixinReplContext(replSpy, appSpy);
   });
+
 });

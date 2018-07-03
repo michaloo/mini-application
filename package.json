@@ -1,6 +1,6 @@
 {
   "name": "mini-application",
-  "version": "1.0.6",
+  "version": "1.1.0",
   "description": "Microservice stubs using Express, Sinon and Event Emitter",
   "main": "src/mini-application.js",
   "scripts": {
@@ -14,28 +14,27 @@
   "license": "MIT",
   "author": "Michał Rączka",
   "dependencies": {
-    "bluebird": "^3.5.0",
-    "body-parser": "^1.17.2",
-    "express": "^4.15.3",
-    "lodash": "^4.17.4",
-    "lowdb": "^0.16.2",
-    "sinon": "^2.3.2",
-    "superagent": "^3.5.2",
-    "superagent-promise-plugin": "^3.2.0",
-    "shelljs": "^0.7.7"
+    "bluebird": "^3.5.1",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "lodash": "^4.17.10",
+    "lowdb": "^1.0.0",
+    "shelljs": "^0.8.2",
+    "sinon": "^6.1.0",
+    "superagent": "^3.8.3"
   },
   "optionalDependencies": {
     "faker": "^4.1.0",
     "moment": "^2.18.1"
   },
   "devDependencies": {
-    "chai": "^4.0.2",
-    "documentation": "^4.0.0-rc.1",
-    "eslint": "^4.3.0",
-    "flow-bin": "^0.59.0",
-    "mocha": "^3.4.2",
-    "mocha-junit-reporter": "^1.13.0",
-    "nyc": "^11.0.3"
+    "chai": "^4.1.2",
+    "documentation": "^8.0.0",
+    "eslint": "^5.0.1",
+    "flow-bin": "^0.75.0",
+    "mocha": "^5.2.0",
+    "mocha-junit-reporter": "^1.17.0",
+    "nyc": "^12.0.2"
   },
   "nyc": {
     "include": [

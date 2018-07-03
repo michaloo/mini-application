@@ -1,7 +1,5 @@
 const fs = require("fs");
 const { expect } = require("chai");
-const sinon = require("sinon");
-const request = require("superagent");
 
 const MiniApplication = require("../src/mini-application");
 
